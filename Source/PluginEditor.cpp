@@ -19,7 +19,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 {
 	setOpaque(true);
 	startTimerHz(30);
-	setSize(1000, 800);
+	setSize(1000, 600);
 	setResizable(true, true);
 
 	buttonWindow.setButtonText(processor.getWindowName());
@@ -38,7 +38,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	sliderFreqL.setRange(20.0f, 20000.0f, 1.0);
 	sliderFreqL.setValue(processor.getFrequencyValue(0));
 	sliderFreqL.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
-	sliderFreqL.setDoubleClickReturnValue(true, 20.0f);
+	sliderFreqL.setTextValueSuffix("Hz");
 	sliderFreqL.onValueChange = [this]
 	{
 		processor.updateFilter(sliderFreqL.getValue(), sliderResL.getValue(), sliderGainL.getValue(), 0);
@@ -57,6 +57,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 	sliderGainL.setSliderStyle(Slider::Rotary);
 	sliderGainL.setRange(-20.0f, 20.0f, 1.0f);
+	sliderGainL.setTextValueSuffix("dB");
 	sliderGainL.setValue(processor.getGainValue(0));
 	sliderGainL.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
 	sliderGainL.onValueChange = [this]
@@ -100,6 +101,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	sliderFreqLM.setValue(processor.getFrequencyValue(1));
 	sliderFreqLM.setDoubleClickReturnValue(true, 200.0f);
 	sliderFreqLM.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
+	sliderFreqLM.setTextValueSuffix("Hz");
 	sliderFreqLM.onValueChange = [this]
 	{
 		processor.updateFilter(sliderFreqLM.getValue(), sliderResLM.getValue(), sliderGainLM.getValue(), 1);
@@ -120,6 +122,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	sliderGainLM.setSliderStyle(Slider::Rotary);
 	sliderGainLM.setRange(-20.0f, 20.0f, 1.0f); // nie moze byc od 0 - testy
 	sliderGainLM.setValue(processor.getGainValue(1));
+	sliderGainLM.setTextValueSuffix("dB");
 	sliderGainLM.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
 	sliderGainLM.onValueChange = [this]
 	{
@@ -131,6 +134,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 	sliderFreqHM.setSliderStyle(Slider::Rotary);
 	sliderFreqHM.setRange(20.0f, 20000.0f, 1.0);
+	sliderFreqHM.setTextValueSuffix("Hz");
 	sliderFreqHM.setValue(processor.getFrequencyValue(2));
 	sliderFreqHM.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
 	sliderFreqHM.onValueChange = [this]
@@ -154,6 +158,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	sliderGainHM.setSliderStyle(Slider::Rotary);
 	sliderGainHM.setRange(-20.0f, 20.0f, 1.0f);
 	sliderGainHM.setValue(processor.getGainValue(2));
+	sliderGainHM.setTextValueSuffix("dB");
 	sliderGainHM.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
 	sliderGainHM.onValueChange = [this]
 	{
@@ -165,6 +170,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 	sliderFreqH.setSliderStyle(Slider::Rotary);
 	sliderFreqH.setRange(20.0f, 20000.0f, 1.0);
+	sliderFreqH.setTextValueSuffix("Hz");
 	sliderFreqH.setValue(processor.getFrequencyValue(3));
 	sliderFreqH.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
 	sliderFreqH.onValueChange = [this]
@@ -186,6 +192,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	addAndMakeVisible(&sliderResH);
 
 	sliderGainH.setSliderStyle(Slider::Rotary);
+	sliderGainH.setTextValueSuffix("dB");
 	sliderGainH.setRange(-20.0f, 20.0f, 1.0f); // nie moze byc od 0 - testy
 	sliderGainH.setValue(processor.getGainValue(3));
 	sliderGainH.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
@@ -207,7 +214,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	btnFilterTypeH.onClick = [this]
 	{
 		processor.setNextFilterTypeHF();
-		//prepareButton(&btnFilterTypeH, 3);
+		btnFilterTypeH.setButtonText(processor.getFilterTypeName(3));
 		if (btnFilterTypeH.getButtonText() == "LP") {
 			sliderGainH.setVisible(false);
 		}
@@ -229,35 +236,58 @@ Eq_spectrumAudioProcessorEditor::~Eq_spectrumAudioProcessorEditor()
 void Eq_spectrumAudioProcessorEditor::paint(Graphics& g)
 {
 	g.fillAll(Colours::black);
+	g.setColour(Colours::darkcyan);
+	g.fillRect(0, 255, 100, 400);
+	g.setColour(Colours::darkgrey);
+	g.fillRect(100, 255,225,400);
+	g.setColour(Colours::darkcyan);
+	g.fillRect(325, 255, 225, 400);
+	g.setColour(Colours::darkgrey);
+	g.fillRect(550, 255, 225, 400);
+	g.setColour(Colours::darkcyan);
+	g.fillRect(775, 255, 225, 400);
 	g.setOpacity(1.0f);
+
+	g.setColour(Colours::white);
+	g.setFont(17);
+	g.drawText("PEAK", 420, 260, 50, 30, Justification::centred);
+	g.drawText("PEAK", 640, 260, 50, 30,Justification::centred );
+	g.setFont(26);
+	g.drawText("F", 20, 330, 50, 30, Justification::centred);
+	g.drawText("Q", 20, 430, 50, 30, Justification::centred);
+	g.drawText("G", 20, 530, 50, 30, Justification::centred);
+
+
 	sc.prepareToPaintSpectrum(processor.fftSize / 2, processor.fftData);
+
+
 }
 
 void Eq_spectrumAudioProcessorEditor::resized()
 {
-	buttonWindow.setBounds(20, 20, 100, 20);
-	sc.setBounds(0, 50, 1000, 300);  / -
-
-	int h_base = 300;
-
-	btnFilterTypeL.setBounds(40, h_base + 35, 50, 30);
-	sliderFreqL.setBounds(10, h_base + 70, 100, 100);
-	sliderResL.setBounds(10, h_base + 170, 100, 100);
-	sliderGainL.setBounds(10, h_base + 290, 100, 100);
+	buttonWindow.setBounds(0, 0, 100, 30);
+	sc.setBounds(0, 20, 1000, 260);  // -
 
 
-	sliderFreqLM.setBounds(210, h_base + 70, 100, 100);
-	sliderResLM.setBounds(210, h_base + 170, 100, 100);
-	sliderGainLM.setBounds(210, h_base + 290, 100, 100);
+	btnFilterTypeL.setBounds(190, 260, 50, 30);
+	sliderFreqL.setBounds(160, 300, 100, 100);
+	sliderResL.setBounds(160, 400, 100, 100);
+	sliderGainL.setBounds(160, 500, 100, 100);
 
-	sliderFreqHM.setBounds(390, h_base + 70, 100, 100);
-	sliderResHM.setBounds(390, h_base + 170, 100, 100);
-	sliderGainHM.setBounds(390, h_base + 290, 100, 100);
 
-	btnFilterTypeH.setBounds(590, h_base + 35, 50, 30);
-	sliderFreqH.setBounds(560, h_base + 70, 100, 100);
-	sliderResH.setBounds(560, h_base + 170, 100, 100);
-	sliderGainH.setBounds(560, h_base + 290, 100, 100);
+	sliderFreqLM.setBounds(390, 300, 100, 100);
+	sliderResLM.setBounds(390, 400, 100, 100);
+	sliderGainLM.setBounds(390, 500, 100, 100);
+
+	sliderFreqHM.setBounds(610, 300, 100, 100);
+	sliderResHM.setBounds(610, 400, 100, 100);
+	sliderGainHM.setBounds(610, 500, 100, 100);
+
+	btnFilterTypeH.setBounds(870, 260, 50, 30);
+	sliderFreqH.setBounds(830, 300, 100, 100);
+	sliderResH.setBounds(830, 400, 100, 100);
+	sliderGainH.setBounds(830, 500, 100, 100);
+
 }
 
 void Eq_spectrumAudioProcessorEditor::timerCallback()

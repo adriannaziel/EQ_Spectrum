@@ -40,16 +40,16 @@ void SpectrumComponent::paint(Graphics& g)
 	{
 		const double proportion = frequenciesForLines[i] / (44100 / 2.0);
 		int xPos = transformToLog(proportion) * (getWidth());
-		g.drawVerticalLine(xPos, 0.0f, getHeight() - 40);
+		g.drawVerticalLine(xPos, 10.0f, getHeight() - 50);
 	}
-	g.drawText("20", 70, 245, 50, 50, Justification::centred);
+	g.drawText("20Hz", 70, 200, 50, 50, Justification::centred);
 	//g.drawText("30", 100, 245, 50, 50, Justification::centred);
-	g.drawText("100", 220, 245, 50, 50, Justification::centred);
-	g.drawText("200", 310, 245, 50, 50, Justification::centred);
-	g.drawText("1000", 530, 245, 50, 50, Justification::centred);
-	g.drawText("2000", 634, 245, 50, 50, Justification::centred);
-	g.drawText("10000", 865, 245, 50, 50, Justification::centred);
-	g.drawText("200000", 950, 245, 50, 50, Justification::centred);
+	g.drawText("100Hz", 220, 200, 50, 50, Justification::centred);
+	g.drawText("200Hz", 310, 200, 50, 50, Justification::centred);
+	g.drawText("1kHz", 530, 200, 50, 50, Justification::centred);
+	g.drawText("2kHz", 634, 200, 50, 50, Justification::centred);
+	g.drawText("10kHz", 865, 200, 50, 50, Justification::centred);
+	g.drawText("20kHz", 957, 200, 50, 50, Justification::centred);
 
 	g.setColour(Colours::darkcyan);
 	paintSpectrum(g);
@@ -70,7 +70,7 @@ void SpectrumComponent::paintSpectrum(Graphics & g)
 	float x = 0;
 	float y = 0;
 
-	float h = getHeight() - 40;
+	float h = getHeight() - 50;
 
 
 
