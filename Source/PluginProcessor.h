@@ -11,18 +11,11 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "Filter.h"
+#include "EqualizerProcesor.h"
+#include "SpectrumProcessor.h"
 //==============================================================================
 /**
 */
-enum WINDOW_TYPE {
-	BH,
-	HANN,
-	HAMMING,
-	RECTANGULAR,
-	BLACKMANN
-};
-
 class Eq_spectrumAudioProcessor : public AudioProcessor
 {
 public:
@@ -30,7 +23,6 @@ public:
 	Eq_spectrumAudioProcessor();
 	~Eq_spectrumAudioProcessor();
 
-	void pushNextSampleIntoFifo(float sample) noexcept;
 
 	//==============================================================================
 	void prepareToPlay(double sampleRate, int samplesPerBlock) override;
@@ -66,54 +58,27 @@ public:
 	void setStateInformation(const void* data, int sizeInBytes) override;
 
 
-	void doProcessing();
-	void changeWindow();
-	String getWindowName();
-
-	enum // moze zamiast enuma to ustawic   a moze enum ok?
-	{
-		fftOrder = 12,
-		fftSize = 1 << fftOrder, // 2^ ??
-	};
-
-
-
-
-	float fftData[2 * fftSize];
-	bool nextFFTBlockReady = false;
-
-
 	float getGainValue(int i);
 	float getResonanceValue(int i);
 	float getFrequencyValue(int i);
 	String getFilterTypeName(int i);
 	void updateFilter(float f, float r, float g, int i);
-	void setNextFilterTypeLF();
-	void setNextFilterTypeHF();
+	void setNextFilterType(int i);
+	void setFilters();
 
-
+	bool isFFTBlockReady();
+	void processFFT();
+	void changeWindow(); // nie wiem czy tu..
+	String getWindowName(); // nie wiem czy tu..
+	float * getFFTData();
+	int getFFTSize();//TMP!!!!!!!!!!!
 
 
 private:
-	void resetFiterL();
-	void resetFiterH();
-	void setFilters();
-	FILTER_TYPE getFilterTypeByName(String name);
+	EqualizerProcessor equalizer_processor;
+	SpectrumProcessor spectrum_processor;
 
 
-	Filter* allFilters[4][2];
-	FILTER_TYPE filterTypeL;
-	FILTER_TYPE filterTypeH;
-	float gains[4];
-	float resonances[4];
-	float frequencies[4];
-
-
-	float  fifo[fftSize];
-	dsp::FFT forwardFFT;
-	dsp::WindowingFunction<float> window;
-	int fifoIndex = 0;
-	WINDOW_TYPE window_type;
 
 	//==============================================================================
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Eq_spectrumAudioProcessor)

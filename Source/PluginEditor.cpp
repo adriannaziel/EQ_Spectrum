@@ -39,6 +39,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	sliderFreqL.setValue(processor.getFrequencyValue(0));
 	sliderFreqL.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
 	sliderFreqL.setTextValueSuffix("Hz");
+	sliderFreqL.setColour(Slider::thumbColourId, Colours::darkcyan);
 	sliderFreqL.onValueChange = [this]
 	{
 		processor.updateFilter(sliderFreqL.getValue(), sliderResL.getValue(), sliderGainL.getValue(), 0);
@@ -47,6 +48,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 	sliderResL.setSliderStyle(Slider::Rotary);
 	sliderResL.setRange(0.1f, 2.0f, 0.05);
+	sliderResL.setColour(Slider::thumbColourId, Colours::darkcyan);
 	sliderResL.setValue(processor.getResonanceValue(0));
 	sliderResL.setTextBoxStyle(Slider::TextBoxAbove, true, 100,20);
 	sliderResL.onValueChange = [this]
@@ -58,6 +60,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	sliderGainL.setSliderStyle(Slider::Rotary);
 	sliderGainL.setRange(-20.0f, 20.0f, 1.0f);
 	sliderGainL.setTextValueSuffix("dB");
+	sliderGainL.setColour(Slider::thumbColourId, Colours::darkcyan);
 	sliderGainL.setValue(processor.getGainValue(0));
 	sliderGainL.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
 	sliderGainL.onValueChange = [this]
@@ -78,7 +81,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 	btnFilterTypeL.onClick = [this]
 	{
-		processor.setNextFilterTypeLF();
+		processor.setNextFilterType(0);
 		btnFilterTypeL.setButtonText(processor.getFilterTypeName(0));// disable gain 
 
 		if (btnFilterTypeL.getButtonText() == "HP") {
@@ -100,6 +103,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	sliderFreqLM.setRange(20.0f, 20000.0f, 1.0);
 	sliderFreqLM.setValue(processor.getFrequencyValue(1));
 	sliderFreqLM.setDoubleClickReturnValue(true, 200.0f);
+	sliderFreqLM.setColour(Slider::thumbColourId, Colours::darkgrey);
 	sliderFreqLM.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
 	sliderFreqLM.setTextValueSuffix("Hz");
 	sliderFreqLM.onValueChange = [this]
@@ -110,6 +114,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 
 	sliderResLM.setSliderStyle(Slider::Rotary);
+	sliderResLM.setColour(Slider::thumbColourId, Colours::darkgrey);
 	sliderResLM.setRange(0.1f, 2.0f, 0.05); //nie moze byc 0
 	sliderResLM.setValue(processor.getResonanceValue(1));
 	sliderResLM.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
@@ -122,6 +127,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	sliderGainLM.setSliderStyle(Slider::Rotary);
 	sliderGainLM.setRange(-20.0f, 20.0f, 1.0f); // nie moze byc od 0 - testy
 	sliderGainLM.setValue(processor.getGainValue(1));
+	sliderGainLM.setColour(Slider::thumbColourId, Colours::darkgrey);
 	sliderGainLM.setTextValueSuffix("dB");
 	sliderGainLM.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
 	sliderGainLM.onValueChange = [this]
@@ -213,7 +219,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	}
 	btnFilterTypeH.onClick = [this]
 	{
-		processor.setNextFilterTypeHF();
+		processor.setNextFilterType(3);
 		btnFilterTypeH.setButtonText(processor.getFilterTypeName(3));
 		if (btnFilterTypeH.getButtonText() == "LP") {
 			sliderGainH.setVisible(false);
@@ -258,7 +264,7 @@ void Eq_spectrumAudioProcessorEditor::paint(Graphics& g)
 	g.drawText("G", 20, 530, 50, 30, Justification::centred);
 
 
-	sc.prepareToPaintSpectrum(processor.fftSize / 2, processor.fftData);
+	sc.prepareToPaintSpectrum(processor.getFFTSize(), processor.getFFTData());
 
 
 }
@@ -294,11 +300,12 @@ void Eq_spectrumAudioProcessorEditor::timerCallback()
 {
 
 
-	if (processor.nextFFTBlockReady == true)
+	if (processor.isFFTBlockReady())
 	{
-		processor.doProcessing();
-		processor.nextFFTBlockReady = false;
-		sc.prepareToPaintSpectrum(processor.fftSize / 2, processor.fftData);
+		//processor.doProcessing();
+		//processor.nextFFTBlockReady = false;
+		processor.processFFT();
+		sc.prepareToPaintSpectrum(processor.getFFTSize(), processor.getFFTData());
 		sc.repaint();
 	}
 

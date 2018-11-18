@@ -21,12 +21,10 @@ Eq_spectrumAudioProcessor::Eq_spectrumAudioProcessor()
 #endif
 		.withOutput("Output", AudioChannelSet::stereo(), true)
 #endif
-	), forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunction<float>::hamming)
+	)
 #endif
 {
-	window_type = HAMMING;
-	filterTypeH = PEAK;
-	filterTypeL = PEAK;
+
 }
 
 Eq_spectrumAudioProcessor::~Eq_spectrumAudioProcessor()
@@ -98,30 +96,8 @@ void Eq_spectrumAudioProcessor::changeProgramName(int index, const String& newNa
 //==============================================================================
 void Eq_spectrumAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-	for (int n = 0; n < 4; ++n) {
-		for (int i = 0; i < getTotalNumInputChannels(); ++i) {
-			Filter* filter;
-			filter = new Filter(sampleRate);
-			filter->setFilterType(PEAK);
-			allFilters[n][i] = filter;
-		}
-	}
-	updateFilter(20.0f, 0.5f, 0.0f, 0);
-	updateFilter(1000.0f, 0.5f, 0.0f, 1);
-	updateFilter(10000.0f, 0.5f, 0.0f, 2);
-	updateFilter(10000.0f, 0.5f, 0.0f, 3);
-}
+	equalizer_processor.prepeareFilters(getTotalNumInputChannels(), sampleRate);
 
-void Eq_spectrumAudioProcessor::resetFiterL()
-{
-	allFilters[0][0]->setFilterType(filterTypeL);
-	allFilters[0][1]->setFilterType(filterTypeL);
-}
-
-void Eq_spectrumAudioProcessor::resetFiterH()
-{
-	allFilters[3][0]->setFilterType(filterTypeH);
-	allFilters[3][1]->setFilterType(filterTypeH);
 }
 
 
@@ -129,10 +105,10 @@ String Eq_spectrumAudioProcessor::getFilterTypeName(int i)
 {
 	FILTER_TYPE filter_type;
 	if (i == 0) {
-		filter_type = filterTypeL;
+		filter_type = equalizer_processor.filterTypeL;
 	}
 	else if (i == 3) {
-		filter_type = filterTypeH;
+		filter_type = equalizer_processor.filterTypeH;
 	}
 
 	if (filter_type == PEAK) {
@@ -156,91 +132,96 @@ String Eq_spectrumAudioProcessor::getFilterTypeName(int i)
 
 }
 
-FILTER_TYPE Eq_spectrumAudioProcessor::getFilterTypeByName(String name)
-{
-	if (name == "PEAK") {
-		return PEAK;
-	}
-	else if (name == "LP") {
-		return LP;
-	}
-	else if (name == "HP") {
-		return HP;
-	}
-	else if (name == "LS") {
-		return LS;
-	}
-	else if (name == "HS") {
-		return HS;
-	}
-	else {
-		return PEAK; //???????????
-	}
-	return PEAK;
-}
-
-void Eq_spectrumAudioProcessor::setNextFilterTypeLF()
-{
-	if (filterTypeL == PEAK) {
-		filterTypeL = HP;
-		resetFiterL();
-	}
-	else if (filterTypeL == HP) {
-		filterTypeL = LS;
-		resetFiterL();
-	}
-	else if (filterTypeL == LS) {
-		filterTypeL = PEAK;
-		resetFiterL();
-	}
-}
-
-void Eq_spectrumAudioProcessor::setNextFilterTypeHF()
-{
-	if (filterTypeH == PEAK) {
-		filterTypeH = LP;
-		resetFiterH();
-	}
-	else if (filterTypeH == LP) {
-		filterTypeH = HS;
-		resetFiterH();
-	}
-	else if (filterTypeH == HS) {
-		filterTypeH = PEAK;
-		resetFiterH();
-	}
-}
-
 
 
 void Eq_spectrumAudioProcessor::updateFilter(float f, float r, float g, int i) {
+	equalizer_processor.updateFilter(f, r, g, i);
+}
 
-	allFilters[i][0]->updateFilter(f, r, Decibels::decibelsToGain(g));
-	allFilters[i][1]->updateFilter(f, r, Decibels::decibelsToGain(g));
-	frequencies[i] = f;
-	gains[i] = g;
-	resonances[i] = r;
+void Eq_spectrumAudioProcessor::setNextFilterType(int i)
+{
+	if (i == 0) {
+		equalizer_processor.setNextFilterTypeLF();
+	}
+	else if (i == 3) {
+		equalizer_processor.setNextFilterTypeHF();
+
+	}
 }
 
 void Eq_spectrumAudioProcessor::setFilters()
 {
-	resetFiterH();
-	resetFiterL();
+	equalizer_processor.resetFiterH();
+	equalizer_processor.resetFiterL();
 }
 
 float Eq_spectrumAudioProcessor::getGainValue(int i)
 {
-	return gains[i];
+	return equalizer_processor.gains[i];
 }
 
 float Eq_spectrumAudioProcessor::getResonanceValue(int i)
 {
-	return resonances[i];
+	return equalizer_processor.resonances[i];
 }
 
 float Eq_spectrumAudioProcessor::getFrequencyValue(int i)
 {
-	return frequencies[i];
+	return equalizer_processor.frequencies[i];
+}
+
+
+bool Eq_spectrumAudioProcessor::isFFTBlockReady()
+{
+	return spectrum_processor.nextFFTBlockReady;
+}
+
+void Eq_spectrumAudioProcessor::processFFT()
+{
+	spectrum_processor.doProcessing();
+	spectrum_processor.nextFFTBlockReady = false;
+}
+
+
+
+
+
+void Eq_spectrumAudioProcessor::changeWindow()
+{
+	spectrum_processor.changeWindow();
+}
+
+String Eq_spectrumAudioProcessor::getWindowName()
+{
+	WINDOW_TYPE wt = spectrum_processor.window_type;
+	if (wt == BH) {
+		return "blackmann-harris";
+	}
+	else if (wt == HANN) {
+		return "hann";
+
+	}
+	else if (wt == HAMMING) {
+		return "hamming";
+	}
+	else  if (wt == BLACKMANN) {
+		return "blackmann";
+	}
+	else  if (wt == RECTANGULAR) {
+		return "rectangular";
+
+	}
+
+}
+
+float * Eq_spectrumAudioProcessor::getFFTData()
+{
+	return spectrum_processor.fftData;
+}
+
+int Eq_spectrumAudioProcessor::getFFTSize()
+{
+	return spectrum_processor.fftSize / 2;
 }
 
 void Eq_spectrumAudioProcessor::releaseResources()
@@ -284,44 +265,27 @@ void Eq_spectrumAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuf
 
 	for (int channel = 0; channel < totalNumInputChannels; ++channel) {
 		float* channelData = buffer.getWritePointer(channel);
-		for (int i = 0; i < 4; ++i) {
-			allFilters[i][channel]->processSamples(channelData, numSamples);
-		}
+		equalizer_processor.doProcessing(channelData, numSamples, channel);
 	}
+
 
 	for (int i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
 	{
 		buffer.clear(i, 0, buffer.getNumSamples());
 	}
 
-
 	if (buffer.getNumChannels() > 0)
 	{
 		auto* channelData = buffer.getReadPointer(0);
 
 		for (auto i = 0; i < buffer.getNumSamples(); ++i)
-			pushNextSampleIntoFifo(channelData[i]);
+			spectrum_processor.pushNextSampleIntoFifo(channelData[i]);
 	}
+
 }
 
 
-void Eq_spectrumAudioProcessor::pushNextSampleIntoFifo(float sample) noexcept
-{
 
-	if (fifoIndex == fftSize)
-	{
-		if (!nextFFTBlockReady)
-		{
-			zeromem(fftData, sizeof(fftData));
-			memcpy(fftData, fifo, sizeof(fifo));
-			nextFFTBlockReady = true;
-		}
-
-		fifoIndex = 0;
-	}
-
-	fifo[fifoIndex++] = sample;
-}
 
 
 
@@ -339,16 +303,9 @@ AudioProcessorEditor* Eq_spectrumAudioProcessor::createEditor()
 //==============================================================================
 void Eq_spectrumAudioProcessor::getStateInformation(MemoryBlock& destData)
 {
-	XmlElement xml("PluginStateEQSP");
-
-	for (int i = 0; i < 4; i++) { //jakis static z tego 4 np FILTERS_NUMBER
-		xml.setAttribute("gain" + i, gains[i]);
-		xml.setAttribute("freq" + i, frequencies[i]);
-		xml.setAttribute("reson" + i, resonances[i]);
-	}
-	xml.setAttribute("ftL", getFilterTypeName(0));
-	xml.setAttribute("ftH", getFilterTypeName(3));
-
+	XmlElement xml("PluginState");
+	equalizer_processor.saveToXml(&xml);
+	xml.setAttribute("window", (int)spectrum_processor.window_type);
 	copyXmlToBinary(xml, destData);
 }
 
@@ -358,75 +315,18 @@ void Eq_spectrumAudioProcessor::setStateInformation(const void* data, int sizeIn
 
 	if (xmlState != 0)
 	{
-		if (xmlState->hasTagName("PluginStateEQSP"))
+		if (xmlState->hasTagName("PluginState"))
 		{
-			for (int i = 0; i < 4; i++) { //jakis static z tego 4 np FILTERS_NUMBER
-				gains[i] = xmlState->getDoubleAttribute("gain" + i, 0);
-				resonances[i] = xmlState->getDoubleAttribute("reson" + i, 0);
-				frequencies[i] = xmlState->getDoubleAttribute("freq" + i, 0);
-			}
-			filterTypeL = getFilterTypeByName(xmlState->getStringAttribute("ftL", "PEAK"));
-			filterTypeH = getFilterTypeByName(xmlState->getStringAttribute("ftH", "PEAK"));
+			equalizer_processor.restoreFromXml(xmlState);
+			spectrum_processor.setWindow((WINDOW_TYPE)(xmlState->getIntAttribute("window", 0)));
+
 		}
 	}
 }
 
-void Eq_spectrumAudioProcessor::doProcessing()
-{
-
-	window.multiplyWithWindowingTable(fftData, fftSize);
-	forwardFFT.performFrequencyOnlyForwardTransform(fftData);
-}
 
 
 
-void Eq_spectrumAudioProcessor::changeWindow()
-{
-	if (window_type == BH) {
-		window.fillWindowingTables(fftSize, dsp::WindowingFunction<float>::hann);
-		window_type = HANN;
-	}
-	else if (window_type == HANN) {
-		window.fillWindowingTables(fftSize, dsp::WindowingFunction<float>::hamming);
-		window_type = HAMMING;
-	}
-
-	else  if (window_type == HAMMING) {
-		window.fillWindowingTables(fftSize, dsp::WindowingFunction<float>::rectangular);
-		window_type = RECTANGULAR;
-	}
-	else  if (window_type == RECTANGULAR) {
-		window.fillWindowingTables(fftSize, dsp::WindowingFunction<float>::blackman);
-		window_type = BLACKMANN;
-	}
-	else  if (window_type == BLACKMANN) {
-		window.fillWindowingTables(fftSize, dsp::WindowingFunction<float>::blackmanHarris);
-		window_type = BH;
-	}
-
-}
-
-String Eq_spectrumAudioProcessor::getWindowName()
-{
-	if (window_type == BH) {
-		return "blackmann-harris";
-	}
-	else if (window_type == HANN) {
-		return "hann";
-
-	}
-	else if (window_type == HAMMING) {
-		return "hamming";
-	}
-	else  if (window_type == BLACKMANN) {
-		return "blackmann";
-	}
-	else  if (window_type == RECTANGULAR) {
-		return "rectangular";
-
-	}
-
-}
 
 //==============================================================================
 // This creates new instances of the plugin..

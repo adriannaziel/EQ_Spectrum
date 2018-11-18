@@ -10,9 +10,6 @@ Author:  lenovo
 
 
 #pragma once
-
-
-
 #include "../JuceLibraryCode/JuceHeader.h"
 
 
