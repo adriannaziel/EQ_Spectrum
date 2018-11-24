@@ -31,10 +31,10 @@ public:
 				allFilters[n][i] = filter;
 			}
 		}
-		updateFilter(20.0f, 0.5f, 0.0f, 0);
-		updateFilter(1000.0f, 0.5f, 0.0f, 1);
-		updateFilter(10000.0f, 0.5f, 0.0f, 2);
-		updateFilter(10000.0f, 0.5f, 0.0f, 3);
+		updateFilter(10000.0f, 1.0f, 0.0f, 0);
+		updateFilter(10000.0f, 1.0f, 0.0f, 1);
+		updateFilter(10000.0f, 1.0f, 0.0f, 2);
+		updateFilter(10000.0f, 1.0f, 0.0f, 3);
 	}
 
 	void doProcessing(float* channelData, int numSamples, int channel) {

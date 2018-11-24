@@ -1,12 +1,4 @@
-/*
-==============================================================================
 
-Filter.h
-Created: 18 Oct 2018 8:49:18am
-Author:  lenovo
-
-==============================================================================
-*/
 
 
 #pragma once
@@ -61,7 +53,7 @@ public:
 		//updateFilter(frequency, resonance, gain);
 	}
 
-	void updateFilter(float f, float r, float g) { //pass filter type?
+	void updateFilter(float f, float r, float g) { 
 		frequency = f;
 		gain = g;
 		resonance = r;
@@ -103,4 +95,5 @@ private:
 	float resonance;
 	float gain;
 	double sample_rate;
+	IIRCoefficients filterCoefficients; 
 };

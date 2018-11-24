@@ -16,8 +16,7 @@ const int SpectrumComponent::numberOfLines = 28;
 //==============================================================================
 SpectrumComponent::SpectrumComponent()
 {
-	// In your constructor, you should add any child components, and
-	// initialise any special settings that your component needs.
+
 
 	setSize(600, 400);  //?!!!!!!!!
 }
@@ -28,12 +27,7 @@ SpectrumComponent::~SpectrumComponent()
 
 void SpectrumComponent::paint(Graphics& g)
 {
-	/* This demo code just fills the component's background and
-	draws some placeholder text to get you started.
 
-	You should replace everything in this method with your own
-	drawing code..
-	*/
 
 	g.setColour(Colours::whitesmoke);
 	for (int i = 0; i < numberOfLines; ++i)
@@ -43,7 +37,6 @@ void SpectrumComponent::paint(Graphics& g)
 		g.drawVerticalLine(xPos, 10.0f, getHeight() - 50);
 	}
 	g.drawText("20Hz", 70, 200, 50, 50, Justification::centred);
-	//g.drawText("30", 100, 245, 50, 50, Justification::centred);
 	g.drawText("100Hz", 220, 200, 50, 50, Justification::centred);
 	g.drawText("200Hz", 310, 200, 50, 50, Justification::centred);
 	g.drawText("1kHz", 530, 200, 50, 50, Justification::centred);
@@ -51,14 +44,17 @@ void SpectrumComponent::paint(Graphics& g)
 	g.drawText("10kHz", 865, 200, 50, 50, Justification::centred);
 	g.drawText("20kHz", 957, 200, 50, 50, Justification::centred);
 
+	g.drawText("-70dB", 20, 180, 50, 50, Justification::centred);
+	g.drawText("-30dB", 20, 82, 50, 50, Justification::centred);
+	g.drawText("  10dB", 20, 9, 50, 50, Justification::top);
+
 	g.setColour(Colours::darkcyan);
 	paintSpectrum(g);
 }
 
 void SpectrumComponent::resized()
 {
-	// This method is where you should set the bounds of any child
-	// components that your component contains..
+
 
 }
 
@@ -77,37 +73,48 @@ void SpectrumComponent::paintSpectrum(Graphics & g)
 	//const float yInPercent = data[0]>0 ? float(0.5 + (Decibels::gainToDecibels(data[0]) / 100.0f)) : -0.01;
 	// to dziala w miare ok ale za duzo zostaje na gorze i do -80 db
 
-	float yy = spectrum_data[0]> 0 ? float(0.5 + (Decibels::gainToDecibels(spectrum_data[0]) / 150)) : -0.01;
-	y = h - h * yy; // 200+ Decibels::gainToDecibels(data[i]) ; //
-					//y = y - 300;
+	//float yy = spectrum_data[0]> 0 ? float(0.5 + (Decibels::gainToDecibels(spectrum_data[0]) / 150)) : -0.01;
+	//y = h - h * yy; // 200+ Decibels::gainToDecibels(data[i]) ; //
+	//				//y = y - 300;
 
-	if (y > h) {
-		y = h;
+	//if (y > h) {
+	//	y = h;
+	//}
+	if (x < 90) {
+		x = 90;
 	}
-	if (x < 80) {
-		x = 80;
-	}
+
+	float y11 = jlimit<float>(-60.0f, 20.0f, (1) * Decibels::gainToDecibels(spectrum_data[0]) - 20);
+	float y21 = jmap<float>(y11, -60.0f, 20.0f, h, 10);
+	y = y21;
 
 	last_x = x;
 	last_y = y;
 
 
 
-	for (int i = 1; i < number_of_bins; i += 5)
+	for (int i = 1; i < number_of_bins; i += 3)
 	{
 		x = transformToLog((float)i / number_of_bins) * (getWidth());
-		const float yInPercent = spectrum_data[i]> 0 ? float(0.5 + (Decibels::gainToDecibels(spectrum_data[i]) / 150)) : -0.01;
-		y = h - h * yInPercent; // 200+ Decibels::gainToDecibels(data[i]) ; //
-								//y=y - 300; //?
+		//const float yInPercent = spectrum_data[i]> 0 ? float(0.0 + (Decibels::gainToDecibels(spectrum_data[i]) / 150)) : -0.01;
+		//y = h - h * yInPercent; // 200+ Decibels::gainToDecibels(data[i]) ; //
+		//						//y=y - 300; //?
 
-		if (y > h) {
-			y = h;
-		}
-		if (x < 80) {
-			x = 80;
+		//if (y > h) {
+		//	y = h;
+		//}
+	
+
+
+		float y1 = jlimit<float>(-60.0f, 20.0f, (1) * Decibels::gainToDecibels(spectrum_data[i])-20);
+		float y2 = jmap<float>(y1, -60.0f, 20.0f, h, 10);
+		y = y2;
+
+	if (x < 90) {
+			x = 90;
+
 			y = last_y;
 		}
-
 		// y = data[0] > 0 ?  jmap(jlimit(-60.0f, 0.0f, Decibels::gainToDecibels(data[i])), -60.0f, 0.0f, h, 10.0f) : h;
 		// y = jmap(jlimit(-100.0f, 6.0f, Decibels::gainToDecibels(data[i])), -100.0f, 0.0f, 0.0f, 1.0f);
 		// y = jmap(y, h, 0.0f);
@@ -128,9 +135,9 @@ void SpectrumComponent::prepareToPaintSpectrum(int numBins, float * data)
 	//repaint();
 }
 
-float SpectrumComponent::transformToLog(float between0and1)
+float SpectrumComponent::transformToLog(float valueToTransform)
 {
 	const float minimum = 1.0f;
 	const float maximum = 1000.0f;
-	return log10(minimum + ((maximum - minimum) * between0and1)) / log10(maximum);
+	return log10(minimum + ((maximum - minimum) * valueToTransform)) / log10(maximum);
 }

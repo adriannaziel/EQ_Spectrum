@@ -204,9 +204,7 @@ String Eq_spectrumAudioProcessor::getWindowName()
 	else if (wt == HAMMING) {
 		return "hamming";
 	}
-	else  if (wt == BLACKMANN) {
-		return "blackmann";
-	}
+
 	else  if (wt == RECTANGULAR) {
 		return "rectangular";
 
@@ -305,7 +303,7 @@ void Eq_spectrumAudioProcessor::getStateInformation(MemoryBlock& destData)
 {
 	XmlElement xml("PluginState");
 	equalizer_processor.saveToXml(&xml);
-	xml.setAttribute("window", (int)spectrum_processor.window_type);
+	spectrum_processor.saveToXml(&xml);
 	copyXmlToBinary(xml, destData);
 }
 
@@ -318,7 +316,7 @@ void Eq_spectrumAudioProcessor::setStateInformation(const void* data, int sizeIn
 		if (xmlState->hasTagName("PluginState"))
 		{
 			equalizer_processor.restoreFromXml(xmlState);
-			spectrum_processor.setWindow((WINDOW_TYPE)(xmlState->getIntAttribute("window", 0)));
+			spectrum_processor.restoreFromXml(xmlState);
 
 		}
 	}

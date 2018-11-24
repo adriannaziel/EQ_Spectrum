@@ -6,8 +6,7 @@ enum WINDOW_TYPE {
 	BH,
 	HANN,
 	HAMMING,
-	RECTANGULAR,
-	BLACKMANN
+	RECTANGULAR
 };
 
 class SpectrumProcessor {
@@ -73,10 +72,6 @@ public:
 			window.fillWindowingTables(fftSize, dsp::WindowingFunction<float>::rectangular);
 			window_type = RECTANGULAR;
 		}
-		else  if (newWindowType == BLACKMANN) {
-			window.fillWindowingTables(fftSize, dsp::WindowingFunction<float>::blackman);
-			window_type = BLACKMANN;
-		}
 		else  if (newWindowType == BH) {
 			window.fillWindowingTables(fftSize, dsp::WindowingFunction<float>::blackmanHarris);
 			window_type = BH;
@@ -105,12 +100,6 @@ public:
 		else  if (window_type == RECTANGULAR) {
 			//window.fillWindowingTables(fftSize, dsp::WindowingFunction<float>::blackman);
 			// = BLACKMANN;
-			setWindow(BLACKMANN);
-
-		}
-		else  if (window_type == BLACKMANN) {
-			//window.fillWindowingTables(fftSize, dsp::WindowingFunction<float>::blackmanHarris);
-			//window_type = BH;
 			setWindow(BH);
 
 		}
@@ -129,9 +118,7 @@ public:
 		else if (window_type == HAMMING) {
 			return "hamming";
 		}
-		else  if (window_type == BLACKMANN) {
-			return "blackmann";
-		}
+
 		else  if (window_type == RECTANGULAR) {
 			return "rectangular";
 
@@ -139,6 +126,16 @@ public:
 
 	}
 
+
+	void saveToXml(XmlElement * xml) {
+		(*xml).setAttribute("window", (int)window_type);
+	}
+
+
+	void restoreFromXml(ScopedPointer<XmlElement> xmlState) {
+		setWindow((WINDOW_TYPE)(xmlState->getIntAttribute("window", 0)));
+
+	}
 
 private:
 

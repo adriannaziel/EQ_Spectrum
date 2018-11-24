@@ -343,13 +343,13 @@
  #define JucePlugin_Enable_IAA             0
 #endif
 #ifndef  JucePlugin_Name
- #define JucePlugin_Name                   "EQ_Spectrum"
+ #define JucePlugin_Name                   "Eq_Spectrum "
 #endif
 #ifndef  JucePlugin_Desc
  #define JucePlugin_Desc                   "EQ_Spectrum"
 #endif
 #ifndef  JucePlugin_Manufacturer
- #define JucePlugin_Manufacturer           "yourcompany"
+ #define JucePlugin_Manufacturer           "Wild Herbs Sound Manufacture"
 #endif
 #ifndef  JucePlugin_ManufacturerWebsite
  #define JucePlugin_ManufacturerWebsite    ""
@@ -454,5 +454,5 @@
  #define JucePlugin_IAASubType             JucePlugin_PluginCode
 #endif
 #ifndef  JucePlugin_IAAName
- #define JucePlugin_IAAName                "yourcompany: EQ_Spectrum"
+ #define JucePlugin_IAAName                "Wild Herbs Sound Manufacture: Eq_Spectrum "
 #endif

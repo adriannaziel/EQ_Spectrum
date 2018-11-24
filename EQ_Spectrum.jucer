@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="yKgYj0" name="EQ_Spectrum" projectType="audioplug" jucerVersion="5.3.2">
+<JUCERPROJECT id="yKgYj0" name="EQ_Spectrum" projectType="audioplug" jucerVersion="5.3.2"
+              pluginManufacturer="Wild Herbs Sound Manufacture" pluginName="Eq_Spectrum ">
   <MAINGROUP id="RFf10d" name="EQ_Spectrum">
     <GROUP id="{80798311-751F-5D66-9136-5CBC5B27B66F}" name="Source">
       <FILE id="sI5JLi" name="PluginProcessor.cpp" compile="1" resource="0"
@@ -15,6 +16,8 @@
             file="Source/SpectrumComponent.h"/>
       <FILE id="vJuOWF" name="EqualizerProcesor.h" compile="0" resource="0"
             file="Source/EqualizerProcesor.h"/>
+      <FILE id="a47Epl" name="AbstractProcessor.h" compile="0" resource="0"
+            file="Source/AbstractProcessor.h"/>
       <FILE id="zc6Vzv" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       <FILE id="Kv8zzA" name="SpectrumProcessor.h" compile="0" resource="0"
             file="Source/SpectrumProcessor.h"/>
