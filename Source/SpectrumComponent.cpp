@@ -1,12 +1,3 @@
-/*
-==============================================================================
-
-SpectrumComponent.cpp
-Created: 11 Nov 2018 9:40:21am
-Author:  lenovo
-
-==============================================================================
-*/
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "SpectrumComponent.h"
@@ -18,7 +9,7 @@ SpectrumComponent::SpectrumComponent()
 {
 
 
-	setSize(600, 400);  //?!!!!!!!!
+	setSize(600, 400);  
 }
 
 SpectrumComponent::~SpectrumComponent()
@@ -60,33 +51,22 @@ void SpectrumComponent::resized()
 
 void SpectrumComponent::paintSpectrum(Graphics & g)
 {
-	//numBins = numBins / 2; // tmp potem zmienic zeby przyjmowalo od razu fftsize / 2
-	//	const float* data = ;// processor.fftData;
 
 	float x = 0;
 	float y = 0;
 
 	float h = getHeight() - 50;
 
+	float yLimited = 0.0f;
+	float yMapped;
 
-
-	//const float yInPercent = data[0]>0 ? float(0.5 + (Decibels::gainToDecibels(data[0]) / 100.0f)) : -0.01;
-	// to dziala w miare ok ale za duzo zostaje na gorze i do -80 db
-
-	//float yy = spectrum_data[0]> 0 ? float(0.5 + (Decibels::gainToDecibels(spectrum_data[0]) / 150)) : -0.01;
-	//y = h - h * yy; // 200+ Decibels::gainToDecibels(data[i]) ; //
-	//				//y = y - 300;
-
-	//if (y > h) {
-	//	y = h;
-	//}
 	if (x < 90) {
 		x = 90;
 	}
 
-	float y11 = jlimit<float>(-60.0f, 20.0f, (1) * Decibels::gainToDecibels(spectrum_data[0]) - 20);
-	float y21 = jmap<float>(y11, -60.0f, 20.0f, h, 10);
-	y = y21;
+	yLimited = jlimit<float>(-60.0f, 20.0f, (1) * Decibels::gainToDecibels(spectrum_data[0]) - 20);
+	yMapped = jmap<float>(yLimited, -60.0f, 20.0f, h, 10);
+	y = yMapped;
 
 	last_x = x;
 	last_y = y;
@@ -96,30 +76,15 @@ void SpectrumComponent::paintSpectrum(Graphics & g)
 	for (int i = 1; i < number_of_bins; i += 3)
 	{
 		x = transformToLog((float)i / number_of_bins) * (getWidth());
-		//const float yInPercent = spectrum_data[i]> 0 ? float(0.0 + (Decibels::gainToDecibels(spectrum_data[i]) / 150)) : -0.01;
-		//y = h - h * yInPercent; // 200+ Decibels::gainToDecibels(data[i]) ; //
-		//						//y=y - 300; //?
 
-		//if (y > h) {
-		//	y = h;
-		//}
-	
+		yLimited = jlimit<float>(-60.0f, 20.0f, (1) * Decibels::gainToDecibels(spectrum_data[i]) - 20);
+		yMapped = jmap<float>(yLimited, -60.0f, 20.0f, h, 10);
+		y = yMapped;
 
-
-		float y1 = jlimit<float>(-60.0f, 20.0f, (1) * Decibels::gainToDecibels(spectrum_data[i])-20);
-		float y2 = jmap<float>(y1, -60.0f, 20.0f, h, 10);
-		y = y2;
-
-	if (x < 90) {
+		if (x < 90) {
 			x = 90;
-
 			y = last_y;
 		}
-		// y = data[0] > 0 ?  jmap(jlimit(-60.0f, 0.0f, Decibels::gainToDecibels(data[i])), -60.0f, 0.0f, h, 10.0f) : h;
-		// y = jmap(jlimit(-100.0f, 6.0f, Decibels::gainToDecibels(data[i])), -100.0f, 0.0f, 0.0f, 1.0f);
-		// y = jmap(y, h, 0.0f);
-		// y =  -1 * Decibels::gainToDecibels(data[i],-60.0f);
-
 
 		g.drawLine(last_x, last_y, x, y);
 		last_x = x;
@@ -132,7 +97,6 @@ void SpectrumComponent::prepareToPaintSpectrum(int numBins, float * data)
 {
 	number_of_bins = numBins;
 	spectrum_data = data;
-	//repaint();
 }
 
 float SpectrumComponent::transformToLog(float valueToTransform)

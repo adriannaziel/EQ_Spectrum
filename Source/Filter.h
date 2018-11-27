@@ -20,38 +20,18 @@ class Filter : public IIRFilter
 public:
 
 	Filter(double sampleRate) {
-		//filter_type = PEAK;
-		sample_rate = sampleRate;
-		//updateFilter(20.0f, 1.0f, 1.0f); //SET DEF VALUES?
-		//setCoefficients(IIRCoefficients::makeLowPass(sampleRate, 8000));
+		sampleRate = sampleRate;
 	}
 
 	void setFilterType(FILTER_TYPE type) {
-		filter_type = type;
+		filterType = type;
 	}
 
 	FILTER_TYPE getFilterType() {
-		return filter_type;
+		return filterType;
 	}
 
-	void prepare() {
-
-	}
-
-	void updateGain(float newVal) {
-		gain = Decibels::gainToDecibels(newVal);
-		//updateFilter(frequency, resonance, gain);
-	}
-
-	void updateResonance(float newVal) {
-		resonance = newVal;
-		//updateFilter(frequency, resonance, gain);
-	}
-
-	void updateFrequency(float newVal) {
-		frequency = newVal;
-		//updateFilter(frequency, resonance, gain);
-	}
+	
 
 	void updateFilter(float f, float r, float g) { 
 		frequency = f;
@@ -62,27 +42,27 @@ public:
 
 	void resetFilter() {
 
-		if (filter_type == PEAK) {
+		if (filterType == PEAK) {
 
-			setCoefficients(IIRCoefficients::makePeakFilter(sample_rate, frequency, resonance, gain));
-
-		}
-		else if (filter_type == LP) {
-			setCoefficients(IIRCoefficients::makeLowPass(sample_rate, frequency, resonance));
+			filterCoefficients = IIRCoefficients::makePeakFilter(sampleRate, frequency, resonance, gain);
 
 		}
-		else if (filter_type == HP) {
-			setCoefficients(IIRCoefficients::makeHighPass(sample_rate, frequency, resonance));
-		}
-		else if (filter_type == LS) {
+		else if (filterType == LP) {
+			filterCoefficients = IIRCoefficients::makeLowPass(sampleRate, frequency, resonance);
 
-			setCoefficients(IIRCoefficients::makeLowShelf(sample_rate, frequency, resonance, gain));
 		}
-		else if (filter_type == HS) {
-			setCoefficients(IIRCoefficients::makeHighShelf(sample_rate, frequency, resonance, gain));
+		else if (filterType == HP) {
+			filterCoefficients = IIRCoefficients::makeHighPass(sampleRate, frequency, resonance);
+		}
+		else if (filterType == LS) {
+
+			filterCoefficients = IIRCoefficients::makeLowShelf(sampleRate, frequency, resonance, gain);
+		}
+		else if (filterType == HS) {
+			filterCoefficients = IIRCoefficients::makeHighShelf(sampleRate, frequency, resonance, gain);
 		}
 
-		//setCoefficients(filter_coefficients);
+		setCoefficients(filterCoefficients);
 
 	}
 
@@ -90,10 +70,10 @@ public:
 
 
 private:
-	FILTER_TYPE filter_type;
+	FILTER_TYPE filterType;
 	float frequency;
 	float resonance;
 	float gain;
-	double sample_rate;
+	double sampleRate;
 	IIRCoefficients filterCoefficients; 
 };

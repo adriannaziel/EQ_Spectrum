@@ -40,7 +40,6 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	sliderFreqL.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
 	sliderFreqL.setTextValueSuffix("Hz");
 	sliderFreqL.setTextBoxIsEditable(true);
-	//sliderFreqL.setColour(Slider::thumbColourId, Colours::darkcyan);
 	sliderFreqL.onValueChange = [this]
 	{
 		processor.updateFilter(sliderFreqL.getValue(), sliderResL.getValue(), sliderGainL.getValue(), 0);
@@ -49,7 +48,6 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 	sliderResL.setSliderStyle(Slider::Rotary);
 	sliderResL.setRange(0.1f, 2.0f, 0.05);
-	//sliderResL.setColour(Slider::thumbColourId, Colours::darkcyan);
 	sliderResL.setValue(processor.getResonanceValue(0));
 	sliderResL.setTextBoxStyle(Slider::TextBoxAbove, true, 100,20);
 	sliderResL.setTextBoxIsEditable(true);
@@ -63,7 +61,6 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	sliderGainL.setSliderStyle(Slider::Rotary);
 	sliderGainL.setRange(-30.0f, 30.0f, 1.0f);
 	sliderGainL.setTextValueSuffix("dB");
-	//sliderGainL.setColour(Slider::thumbColourId, Colours::darkcyan);
 	sliderGainL.setValue(processor.getGainValue(0));
 	sliderGainL.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
 	sliderGainL.setTextBoxIsEditable(true);
@@ -75,7 +72,6 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	addAndMakeVisible(&sliderGainL);
 
 	btnFilterTypeL.setButtonText(processor.getFilterTypeName(0));
-	//prepareButton(&btnFilterTypeL, 0);
 
 	if (btnFilterTypeL.getButtonText() == "HP") {
 		sliderGainL.setVisible(false);
@@ -87,7 +83,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	btnFilterTypeL.onClick = [this]
 	{
 		processor.setNextFilterType(0);
-		btnFilterTypeL.setButtonText(processor.getFilterTypeName(0));// disable gain 
+		btnFilterTypeL.setButtonText(processor.getFilterTypeName(0));
 
 		if (btnFilterTypeL.getButtonText() == "HP") {
 			sliderGainL.setVisible(false);
@@ -95,8 +91,8 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 		else {
 			sliderGainL.setVisible(true);
 
-		}	//	prepareButton(&btnFilterTypeL, 0);
-		processor.updateFilter(sliderFreqL.getValue(), sliderResL.getValue(), sliderGainL.getValue(), 0); // CHANGE THE VALUES!!!!
+		}	
+		processor.updateFilter(sliderFreqL.getValue(), sliderResL.getValue(), sliderGainL.getValue(), 0); 
 	};
 
 	addAndMakeVisible(&btnFilterTypeL);
@@ -108,7 +104,6 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	sliderFreqLM.setRange(20.0f, 20000.0f, 1.0);
 	sliderFreqLM.setValue(processor.getFrequencyValue(1));
 	sliderFreqLM.setDoubleClickReturnValue(true, 200.0f);
-	//sliderFreqLM.setColour(Slider::thumbColourId, Colours::darkgrey);
 	sliderFreqLM.setTextBoxStyle(Slider::TextBoxAbove, true, 100, 20);
 	sliderFreqLM.setTextValueSuffix("Hz");
 	sliderFreqLM.setTextBoxIsEditable(true);
@@ -121,8 +116,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 
 	sliderResLM.setSliderStyle(Slider::Rotary);
-	//sliderResLM.setColour(Slider::thumbColourId, Colours::darkgrey);
-	sliderResLM.setRange(0.1f, 2.0f, 0.05); //nie moze byc 0
+	sliderResLM.setRange(0.1f, 2.0f, 0.05); 
 	sliderResLM.setValue(processor.getResonanceValue(1));
 	sliderResLM.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
 	sliderResLM.setTextBoxIsEditable(true);
@@ -134,9 +128,8 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	addAndMakeVisible(&sliderResLM);
 
 	sliderGainLM.setSliderStyle(Slider::Rotary);
-	sliderGainLM.setRange(-30.0f, 30.0f, 1.0f); // nie moze byc od 0 - testy
+	sliderGainLM.setRange(-30.0f, 30.0f, 1.0f); 
 	sliderGainLM.setValue(processor.getGainValue(1));
-	//sliderGainLM.setColour(Slider::thumbColourId, Colours::darkgrey);
 	sliderGainLM.setTextValueSuffix("dB");
 
 	sliderGainLM.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
@@ -165,7 +158,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 
 	sliderResHM.setSliderStyle(Slider::Rotary);
-	sliderResHM.setRange(0.1f, 2.0f, 0.05); //nie moze byc 0
+	sliderResHM.setRange(0.1f, 2.0f, 0.05); 
 	sliderResHM.setValue(processor.getResonanceValue(2));
 	sliderResHM.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
 	sliderResHM.setTextBoxIsEditable(true);
@@ -209,7 +202,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 
 	sliderResH.setSliderStyle(Slider::Rotary);
-	sliderResH.setRange(0.1f, 2.0f, 0.05); //nie moze byc 0
+	sliderResH.setRange(0.1f, 2.0f, 0.05);
 	sliderResH.setValue(processor.getResonanceValue(3));
 	sliderResH.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
 	sliderResH.setTextBoxIsEditable(true);
@@ -222,7 +215,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 	sliderGainH.setSliderStyle(Slider::Rotary);
 	sliderGainH.setTextValueSuffix("dB");
-	sliderGainH.setRange(-30.0f, 30.0f, 1.0f); // nie moze byc od 0 - testy
+	sliderGainH.setRange(-30.0f, 30.0f, 1.0f); 
 	sliderGainH.setValue(processor.getGainValue(3));
 	sliderGainH.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
 	sliderGainH.setTextBoxIsEditable(true);
@@ -234,7 +227,6 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	addAndMakeVisible(&sliderGainH);
 
 	btnFilterTypeH.setButtonText(processor.getFilterTypeName(3));
-	//prepareButton(&btnFilterTypeH, 3);
 
 	if (btnFilterTypeH.getButtonText() == "LP") {
 		sliderGainH.setVisible(false);
@@ -252,8 +244,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 		else {
 			sliderGainH.setVisible(true);
 		}
-		//btnFilterTypeH.setButtonText(processor.getFilterTypeName(3));
-		processor.updateFilter(sliderFreqH.getValue(), sliderResH.getValue(), sliderGainH.getValue(), 3); // CHANGE THE VALUES!!!!
+		processor.updateFilter(sliderFreqH.getValue(), sliderResH.getValue(), sliderGainH.getValue(), 3); 
 	};
 	addAndMakeVisible(&btnFilterTypeH);
 }
