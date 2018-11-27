@@ -1,29 +1,30 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Filter.h"
-
+#define NUMBER_OF_FILTERS 4
+#define MAX_CHANNELS 2
 
 #pragma once
 
 class EqualizerProcessor {
 
 public:
-	Filter * allFilters[4][2];
+	Filter * allFilters[NUMBER_OF_FILTERS][MAX_CHANNELS];
 	FILTER_TYPE filterTypeL;
 	FILTER_TYPE filterTypeH;
-	float gains[4];
-	float resonances[4];
-	float frequencies[4];
+	float gains[NUMBER_OF_FILTERS];
+	float resonances[NUMBER_OF_FILTERS];
+	float frequencies[NUMBER_OF_FILTERS];
 
 
 	EqualizerProcessor() {
-		filterTypeH = PEAK;
-		filterTypeL = PEAK;
+		filterTypeH = LP;
+		filterTypeL = HP;
 	}
 
 
 	void prepeareFilters(int numChannels, int sampleRate) {
-		for (int n = 0; n < 4; ++n) {
+		for (int n = 0; n < NUMBER_OF_FILTERS; ++n) {
 			for (int i = 0; i < numChannels; ++i) {
 				Filter* filter;
 				filter = new Filter(sampleRate);
@@ -31,14 +32,16 @@ public:
 				allFilters[n][i] = filter;
 			}
 		}
-		updateFilter(10000.0f, 1.0f, 0.0f, 0);
-		updateFilter(10000.0f, 1.0f, 0.0f, 1);
-		updateFilter(10000.0f, 1.0f, 0.0f, 2);
-		updateFilter(10000.0f, 1.0f, 0.0f, 3);
+		updateFilter(1000.0f, 1.0f, 0.0f, 0);
+		updateFilter(4000.0f, 1.0f, 0.0f, 1);
+		updateFilter(12000.0f, 1.0f, 0.0f, 2);
+		updateFilter(16000.0f, 1.0f, 0.0f, 3);
+		resetFiterH();
+		resetFiterL();
 	}
 
 	void doProcessing(float* channelData, int numSamples, int channel) {
-		for (int i = 0; i < 4; ++i) {
+		for (int i = 0; i < NUMBER_OF_FILTERS; ++i) {
 			allFilters[i][channel]->processSamples(channelData, numSamples);
 		}
 	}
@@ -92,19 +95,19 @@ public:
 	}
 
 	void saveToXml(XmlElement * xml) {
-		for (int i = 0; i < 4; i++) { //jakis static z tego 4 np FILTERS_NUMBER
+		for (int i = 0; i < NUMBER_OF_FILTERS; i++) { 
 			(*xml).setAttribute("gain" + i, gains[i]);
 			(*xml).setAttribute("freq" + i, frequencies[i]);
 			(*xml).setAttribute("reson" + i, resonances[i]);
 		}
-		(*xml).setAttribute("ftL", (int)filterTypeL);  // moze zamoast zapisywañ string i bawic sie w name to inty 
+		(*xml).setAttribute("ftL", (int)filterTypeL);  
 		(*xml).setAttribute("ftH", (int)filterTypeH);
 	}
 
 
 	void restoreFromXml(ScopedPointer<XmlElement> xmlState) {
 
-		for (int i = 0; i < 4; i++) { //jakis static z tego 4 np FILTERS_NUMBER
+		for (int i = 0; i < NUMBER_OF_FILTERS; i++) { 
 
 			gains[i] = xmlState->getDoubleAttribute("gain" + i, 0);
 			resonances[i] = xmlState->getDoubleAttribute("reson" + i, 0);

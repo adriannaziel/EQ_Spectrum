@@ -16,10 +16,10 @@ public:
 		window_type = HAMMING;
 	}
 
-	enum // moze zamiast enuma to ustawic   a moze enum ok?
+	enum 
 	{
 		fftOrder = 12,
-		fftSize = 1 << fftOrder, // 2^ ??
+		fftSize = 1 << fftOrder, 
 	};
 
 
@@ -82,31 +82,22 @@ public:
 	{
 		if (window_type == BH) {
 			setWindow(HANN);
-			//window.fillWindowingTables(fftSize, dsp::WindowingFunction<float>::hann);
-			//window_type = HANN;
 		}
 		else if (window_type == HANN) {
 			setWindow(HAMMING);
-			//window.fillWindowingTables(fftSize, dsp::WindowingFunction<float>::hamming);
-			//window_type = HAMMING;
 		}
 
 		else  if (window_type == HAMMING) {
-			//window.fillWindowingTables(fftSize, dsp::WindowingFunction<float>::rectangular);
-			//	window_type = RECTANGULAR;
 			setWindow(RECTANGULAR);
 
 		}
 		else  if (window_type == RECTANGULAR) {
-			//window.fillWindowingTables(fftSize, dsp::WindowingFunction<float>::blackman);
-			// = BLACKMANN;
 			setWindow(BH);
-
 		}
 
 	}
 
-	String getWindowName()  //Nie wiem czy to jest potrzebne tutaj ale na razie wrzucam
+	String getWindowName()  
 	{
 		if (window_type == BH) {
 			return "blackmann-harris";

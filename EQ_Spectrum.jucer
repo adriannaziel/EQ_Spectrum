@@ -16,8 +16,6 @@
             file="Source/SpectrumComponent.h"/>
       <FILE id="vJuOWF" name="EqualizerProcesor.h" compile="0" resource="0"
             file="Source/EqualizerProcesor.h"/>
-      <FILE id="a47Epl" name="AbstractProcessor.h" compile="0" resource="0"
-            file="Source/AbstractProcessor.h"/>
       <FILE id="zc6Vzv" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       <FILE id="Kv8zzA" name="SpectrumProcessor.h" compile="0" resource="0"
             file="Source/SpectrumProcessor.h"/>
