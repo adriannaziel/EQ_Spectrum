@@ -12,8 +12,8 @@ enum WINDOW_TYPE {
 class SpectrumProcessor {
 public:
 
-	SpectrumProcessor() : forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunction<float>::hamming) {
-		window_type = HAMMING;
+	SpectrumProcessor() : forwardFFT(fftOrder), window(fftSize, dsp::WindowingFunction<float>::blackmanHarris) {
+		window_type = BH;
 	}
 
 	enum 
@@ -22,18 +22,6 @@ public:
 		fftSize = 1 << fftOrder, 
 	};
 
-
-
-	float fftData[2 * fftSize];
-	bool nextFFTBlockReady = false;
-
-
-
-	float  fifo[fftSize];
-	dsp::FFT forwardFFT;
-	dsp::WindowingFunction<float> window;
-	int fifoIndex = 0;
-	WINDOW_TYPE window_type;
 
 
 	void pushNextSampleIntoFifo(float sample) noexcept {
@@ -125,12 +113,35 @@ public:
 
 	void restoreFromXml(ScopedPointer<XmlElement> xmlState) {
 		setWindow((WINDOW_TYPE)(xmlState->getIntAttribute("window", 0)));
-
+		
 	}
 
-private:
+	bool isNextBlockReady() {
+		return nextFFTBlockReady;
+	}
+
+	void setNextBlockReady(bool isReady) {
+		nextFFTBlockReady = isReady;
+	}
+
+	float * getFFTData() {
+		return fftData;
+	}
+
+	WINDOW_TYPE getWindowType() {
+		return window_type;
+	}
+	
 
 
+	private:
+		float fftData[2 * fftSize];
+		bool nextFFTBlockReady = false;
+		float  fifo[fftSize];
+		dsp::FFT forwardFFT;
+		dsp::WindowingFunction<float> window;
+		int fifoIndex = 0;
+		WINDOW_TYPE window_type;
 
 
 };

@@ -9,24 +9,19 @@
 class EqualizerProcessor {
 
 public:
-	Filter * allFilters[NUMBER_OF_FILTERS][MAX_CHANNELS];
-	FILTER_TYPE filterTypeL;
-	FILTER_TYPE filterTypeH;
-	float gains[NUMBER_OF_FILTERS];
-	float resonances[NUMBER_OF_FILTERS];
-	float frequencies[NUMBER_OF_FILTERS];
 
 
 	EqualizerProcessor() {
-		filterTypeH = LP;
-		filterTypeL = HP;
+		filterTypeH = PEAK;
+		filterTypeL = PEAK;
 	}
+
 
 
 	void prepeareFilters(int numChannels, int sampleRate) {
 		for (int n = 0; n < NUMBER_OF_FILTERS; ++n) {
 			for (int i = 0; i < numChannels; ++i) {
-				Filter* filter;
+				Filter * filter;
 				filter = new Filter(sampleRate);
 				filter->setFilterType(PEAK);
 				allFilters[n][i] = filter;
@@ -34,8 +29,8 @@ public:
 		}
 		updateFilter(1000.0f, 1.0f, 0.0f, 0);
 		updateFilter(4000.0f, 1.0f, 0.0f, 1);
-		updateFilter(12000.0f, 1.0f, 0.0f, 2);
-		updateFilter(16000.0f, 1.0f, 0.0f, 3);
+		updateFilter(16000.0f, 1.0f, 0.0f, 2);
+		updateFilter(19000.0f, 1.0f, 0.0f, 3);
 		resetFiterH();
 		resetFiterL();
 	}
@@ -46,6 +41,21 @@ public:
 		}
 	}
 
+	FILTER_TYPE getFilterType(int i) {
+		return (allFilters[i][0])->getFilterType();
+	}
+
+	float getGain(int i) {
+		return gains[i];
+	}
+
+	float getQuality(int i) {
+		return qualities[i];
+	}
+
+	float getFrequency(int i) {
+		return frequencies[i];
+	}
 
 
 	void resetFiterL()
@@ -98,7 +108,7 @@ public:
 		for (int i = 0; i < NUMBER_OF_FILTERS; i++) { 
 			(*xml).setAttribute("gain" + i, gains[i]);
 			(*xml).setAttribute("freq" + i, frequencies[i]);
-			(*xml).setAttribute("reson" + i, resonances[i]);
+			(*xml).setAttribute("quality" + i, qualities[i]);
 		}
 		(*xml).setAttribute("ftL", (int)filterTypeL);  
 		(*xml).setAttribute("ftH", (int)filterTypeH);
@@ -110,25 +120,33 @@ public:
 		for (int i = 0; i < NUMBER_OF_FILTERS; i++) { 
 
 			gains[i] = xmlState->getDoubleAttribute("gain" + i, 0);
-			resonances[i] = xmlState->getDoubleAttribute("reson" + i, 0);
+			qualities[i] = xmlState->getDoubleAttribute("quality" + i, 0);
 			frequencies[i] = xmlState->getDoubleAttribute("freq" + i, 0);
 		}
 
-		filterTypeL = (FILTER_TYPE)(xmlState->getIntAttribute("ftL", 0));
-		filterTypeH = (FILTER_TYPE)(xmlState->getIntAttribute("ftH", 0));
+		filterTypeL = (FILTER_TYPE)(xmlState->getIntAttribute("ftL", 2));
+		filterTypeH = (FILTER_TYPE)(xmlState->getIntAttribute("ftH", 1));
 	}
 
-	void updateFilter(float f, float r, float g, int i) {
+	void updateFilter(float f, float q, float g, int i) {
 
-		allFilters[i][0]->updateFilter(f, r, Decibels::decibelsToGain(g));
-		allFilters[i][1]->updateFilter(f, r, Decibels::decibelsToGain(g));
+		allFilters[i][0]->updateFilter(f, q, Decibels::decibelsToGain(g));
+		allFilters[i][1]->updateFilter(f, q, Decibels::decibelsToGain(g));
 		frequencies[i] = f;
 		gains[i] = g;
-		resonances[i] = r;
+		qualities[i] = q;
 	}
 
 private:
 
+	Filter * allFilters[NUMBER_OF_FILTERS][MAX_CHANNELS];
+	OwnedArray<OwnedArray<Filter>> ownedar; 
+	
+	FILTER_TYPE filterTypeL;
+	FILTER_TYPE filterTypeH;
+	float gains[NUMBER_OF_FILTERS];
+	float qualities[NUMBER_OF_FILTERS];
+	float frequencies[NUMBER_OF_FILTERS];
 
 
 

@@ -104,12 +104,7 @@ void Eq_spectrumAudioProcessor::prepareToPlay(double sampleRate, int samplesPerB
 String Eq_spectrumAudioProcessor::getFilterTypeName(int i)
 {
 	FILTER_TYPE filter_type;
-	if (i == 0) {
-		filter_type = equalizer_processor.filterTypeL;
-	}
-	else if (i == 3) {
-		filter_type = equalizer_processor.filterTypeH;
-	}
+		filter_type = equalizer_processor.getFilterType(i);
 
 	if (filter_type == PEAK) {
 		return "PEAK";
@@ -134,8 +129,8 @@ String Eq_spectrumAudioProcessor::getFilterTypeName(int i)
 
 
 
-void Eq_spectrumAudioProcessor::updateFilter(float f, float r, float g, int i) {
-	equalizer_processor.updateFilter(f, r, g, i);
+void Eq_spectrumAudioProcessor::updateFilter(float f, float q, float g, int i) {
+	equalizer_processor.updateFilter(f, q, g, i);
 }
 
 void Eq_spectrumAudioProcessor::setNextFilterType(int i)
@@ -157,29 +152,31 @@ void Eq_spectrumAudioProcessor::setFilters()
 
 float Eq_spectrumAudioProcessor::getGainValue(int i)
 {
-	return equalizer_processor.gains[i];
+	return equalizer_processor.getGain(i);
 }
 
-float Eq_spectrumAudioProcessor::getResonanceValue(int i)
+float Eq_spectrumAudioProcessor::getQualityValue(int i)
 {
-	return equalizer_processor.resonances[i];
+	return equalizer_processor.getQuality(i);
 }
 
 float Eq_spectrumAudioProcessor::getFrequencyValue(int i)
 {
-	return equalizer_processor.frequencies[i];
+	return equalizer_processor.getFrequency(i);
 }
+
+
 
 
 bool Eq_spectrumAudioProcessor::isFFTBlockReady()
 {
-	return spectrum_processor.nextFFTBlockReady;
+	return spectrum_processor.isNextBlockReady();
 }
 
 void Eq_spectrumAudioProcessor::processFFT()
 {
 	spectrum_processor.doProcessing();
-	spectrum_processor.nextFFTBlockReady = false;
+	spectrum_processor.setNextBlockReady(false);
 }
 
 
@@ -193,7 +190,7 @@ void Eq_spectrumAudioProcessor::changeWindow()
 
 String Eq_spectrumAudioProcessor::getWindowName()
 {
-	WINDOW_TYPE wt = spectrum_processor.window_type;
+	WINDOW_TYPE wt = spectrum_processor.getWindowType();
 	if (wt == BH) {
 		return "blackmann-harris";
 	}
@@ -214,7 +211,7 @@ String Eq_spectrumAudioProcessor::getWindowName()
 
 float * Eq_spectrumAudioProcessor::getFFTData()
 {
-	return spectrum_processor.fftData;
+	return spectrum_processor.getFFTData();
 }
 
 int Eq_spectrumAudioProcessor::getFFTSize()
@@ -301,7 +298,7 @@ AudioProcessorEditor* Eq_spectrumAudioProcessor::createEditor()
 //==============================================================================
 void Eq_spectrumAudioProcessor::getStateInformation(MemoryBlock& destData)
 {
-	XmlElement xml("PluginState");
+	XmlElement xml("PluginStateSaveParams");
 	equalizer_processor.saveToXml(&xml);
 	spectrum_processor.saveToXml(&xml);
 	copyXmlToBinary(xml, destData);
@@ -309,14 +306,17 @@ void Eq_spectrumAudioProcessor::getStateInformation(MemoryBlock& destData)
 
 void Eq_spectrumAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
+
 	ScopedPointer<XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+	ScopedPointer<XmlElement> xmlState2(getXmlFromBinary(data, sizeInBytes));
 
 	if (xmlState != 0)
 	{
-		if (xmlState->hasTagName("PluginState"))
+		if (xmlState->hasTagName("PluginStateSaveParams"))
 		{
-			equalizer_processor.restoreFromXml(xmlState);
-			spectrum_processor.restoreFromXml(xmlState);
+			
+		equalizer_processor.restoreFromXml(xmlState);
+		spectrum_processor.restoreFromXml(xmlState2);
 
 		}
 	}

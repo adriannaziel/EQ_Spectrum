@@ -322,10 +322,10 @@
  #define JucePlugin_Build_VST              1
 #endif
 #ifndef  JucePlugin_Build_VST3
- #define JucePlugin_Build_VST3             0
+ #define JucePlugin_Build_VST3             1
 #endif
 #ifndef  JucePlugin_Build_AU
- #define JucePlugin_Build_AU               1
+ #define JucePlugin_Build_AU               0
 #endif
 #ifndef  JucePlugin_Build_AUv3
  #define JucePlugin_Build_AUv3             0
@@ -337,7 +337,7 @@
  #define JucePlugin_Build_AAX              0
 #endif
 #ifndef  JucePlugin_Build_Standalone
- #define JucePlugin_Build_Standalone       1
+ #define JucePlugin_Build_Standalone       0
 #endif
 #ifndef  JucePlugin_Enable_IAA
  #define JucePlugin_Enable_IAA             0
@@ -346,10 +346,10 @@
  #define JucePlugin_Name                   "Eq_Spectrum "
 #endif
 #ifndef  JucePlugin_Desc
- #define JucePlugin_Desc                   "EQ_Spectrum"
+ #define JucePlugin_Desc                   "EQ_Spectrum_Plugin"
 #endif
 #ifndef  JucePlugin_Manufacturer
- #define JucePlugin_Manufacturer           "Wild Herbs Sound Manufacture"
+ #define JucePlugin_Manufacturer           "AdriannaZielinska"
 #endif
 #ifndef  JucePlugin_ManufacturerWebsite
  #define JucePlugin_ManufacturerWebsite    ""
@@ -403,16 +403,16 @@
  #define JucePlugin_AUSubType              JucePlugin_PluginCode
 #endif
 #ifndef  JucePlugin_AUExportPrefix
- #define JucePlugin_AUExportPrefix         EQ_SpectrumAU
+ #define JucePlugin_AUExportPrefix         EQ_Spectrum_PluginAU
 #endif
 #ifndef  JucePlugin_AUExportPrefixQuoted
- #define JucePlugin_AUExportPrefixQuoted   "EQ_SpectrumAU"
+ #define JucePlugin_AUExportPrefixQuoted   "EQ_Spectrum_PluginAU"
 #endif
 #ifndef  JucePlugin_AUManufacturerCode
  #define JucePlugin_AUManufacturerCode     JucePlugin_ManufacturerCode
 #endif
 #ifndef  JucePlugin_CFBundleIdentifier
- #define JucePlugin_CFBundleIdentifier     com.yourcompany.EQ_Spectrum
+ #define JucePlugin_CFBundleIdentifier     com.yourcompany.EQ_Spectrum_Plugin
 #endif
 #ifndef  JucePlugin_RTASCategory
  #define JucePlugin_RTASCategory           0
@@ -430,7 +430,7 @@
  #define JucePlugin_RTASDisableMultiMono   0
 #endif
 #ifndef  JucePlugin_AAXIdentifier
- #define JucePlugin_AAXIdentifier          com.yourcompany.EQ_Spectrum
+ #define JucePlugin_AAXIdentifier          com.yourcompany.EQ_Spectrum_Plugin
 #endif
 #ifndef  JucePlugin_AAXManufacturerCode
  #define JucePlugin_AAXManufacturerCode    JucePlugin_ManufacturerCode
@@ -454,5 +454,5 @@
  #define JucePlugin_IAASubType             JucePlugin_PluginCode
 #endif
 #ifndef  JucePlugin_IAAName
- #define JucePlugin_IAAName                "Wild Herbs Sound Manufacture: Eq_Spectrum "
+ #define JucePlugin_IAAName                "AdriannaZielinska: Eq_Spectrum "
 #endif

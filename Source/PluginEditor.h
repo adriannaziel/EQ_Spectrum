@@ -40,21 +40,21 @@ private:
 
 
 	Slider sliderFreqL;
-	Slider sliderResL;
+	Slider sliderQualityL;
 	Slider sliderGainL;
 	TextButton btnFilterTypeL;
 
 
 	Slider sliderFreqLM;
-	Slider sliderResLM;
+	Slider sliderQualityLM;
 	Slider sliderGainLM;
 
 	Slider sliderFreqHM;
-	Slider sliderResHM;
+	Slider sliderQualityHM;
 	Slider sliderGainHM;
 
 	Slider sliderFreqH;
-	Slider sliderResH;
+	Slider sliderQualityH;
 	Slider sliderGainH;
 	TextButton btnFilterTypeH;
 

@@ -7,8 +7,6 @@ const int SpectrumComponent::numberOfLines = 28;
 //==============================================================================
 SpectrumComponent::SpectrumComponent()
 {
-
-
 	setSize(600, 400);  
 }
 
@@ -27,13 +25,13 @@ void SpectrumComponent::paint(Graphics& g)
 		int xPos = transformToLog(proportion) * (getWidth());
 		g.drawVerticalLine(xPos, 10.0f, getHeight() - 50);
 	}
-	g.drawText("20Hz", 70, 200, 50, 50, Justification::centred);
-	g.drawText("100Hz", 220, 200, 50, 50, Justification::centred);
-	g.drawText("200Hz", 310, 200, 50, 50, Justification::centred);
-	g.drawText("1kHz", 530, 200, 50, 50, Justification::centred);
-	g.drawText("2kHz", 634, 200, 50, 50, Justification::centred);
-	g.drawText("10kHz", 865, 200, 50, 50, Justification::centred);
-	g.drawText("20kHz", 957, 200, 50, 50, Justification::centred);
+	g.drawText("20Hz", 70, 195, 50, 50, Justification::centred);
+	g.drawText("100Hz", 220, 195, 50, 50, Justification::centred);
+	g.drawText("200Hz", 310, 195, 50, 50, Justification::centred);
+	g.drawText("1kHz", 530, 195, 50, 50, Justification::centred);
+	g.drawText("2kHz", 634, 195, 50, 50, Justification::centred);
+	g.drawText("10kHz", 865, 195, 50, 50, Justification::centred);
+	g.drawText("20kHz", 957, 195, 50, 50, Justification::centred);
 
 	g.drawText("-70dB", 20, 180, 50, 50, Justification::centred);
 	g.drawText("-30dB", 20, 82, 50, 50, Justification::centred);
@@ -45,8 +43,6 @@ void SpectrumComponent::paint(Graphics& g)
 
 void SpectrumComponent::resized()
 {
-
-
 }
 
 void SpectrumComponent::paintSpectrum(Graphics & g)
@@ -73,7 +69,7 @@ void SpectrumComponent::paintSpectrum(Graphics & g)
 
 
 
-	for (int i = 1; i < number_of_bins; i += 3)
+	for (int i = 1; i < number_of_bins; i += 4)
 	{
 		x = transformToLog((float)i / number_of_bins) * (getWidth());
 

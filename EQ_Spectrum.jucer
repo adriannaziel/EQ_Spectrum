@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="yKgYj0" name="EQ_Spectrum" projectType="audioplug" jucerVersion="5.3.2"
-              pluginManufacturer="Wild Herbs Sound Manufacture" pluginName="Eq_Spectrum ">
-  <MAINGROUP id="RFf10d" name="EQ_Spectrum">
+<JUCERPROJECT id="yKgYj0" name="EQ_Spectrum_Plugin" projectType="audioplug"
+              jucerVersion="5.3.2" pluginManufacturer="AdriannaZielinska" pluginName="Eq_Spectrum "
+              pluginFormats="buildVST,buildVST3">
+  <MAINGROUP id="RFf10d" name="EQ_Spectrum_Plugin">
     <GROUP id="{80798311-751F-5D66-9136-5CBC5B27B66F}" name="Source">
       <FILE id="sI5JLi" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>

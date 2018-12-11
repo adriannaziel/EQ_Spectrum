@@ -59,19 +59,19 @@ public:
 
 
 	float getGainValue(int i);
-	float getResonanceValue(int i);
+	float getQualityValue(int i);
 	float getFrequencyValue(int i);
 	String getFilterTypeName(int i);
-	void updateFilter(float f, float r, float g, int i);
+	void updateFilter(float f, float q, float g, int i);
 	void setNextFilterType(int i);
 	void setFilters();
 
 	bool isFFTBlockReady();
 	void processFFT();
-	void changeWindow(); // nie wiem czy tu..
-	String getWindowName(); // nie wiem czy tu..
+	void changeWindow(); 
+	String getWindowName();
 	float * getFFTData();
-	int getFFTSize();//TMP!!!!!!!!!!!
+	int getFFTSize();
 
 
 private:

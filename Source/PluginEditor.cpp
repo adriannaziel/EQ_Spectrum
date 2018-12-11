@@ -42,21 +42,21 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 	sliderFreqL.setTextBoxIsEditable(true);
 	sliderFreqL.onValueChange = [this]
 	{
-		processor.updateFilter(sliderFreqL.getValue(), sliderResL.getValue(), sliderGainL.getValue(), 0);
+		processor.updateFilter(sliderFreqL.getValue(), sliderQualityL.getValue(), sliderGainL.getValue(), 0);
 	};
 	addAndMakeVisible(&sliderFreqL);
 
-	sliderResL.setSliderStyle(Slider::Rotary);
-	sliderResL.setRange(0.1f, 2.0f, 0.05);
-	sliderResL.setValue(processor.getResonanceValue(0));
-	sliderResL.setTextBoxStyle(Slider::TextBoxAbove, true, 100,20);
-	sliderResL.setTextBoxIsEditable(true);
+	sliderQualityL.setSliderStyle(Slider::Rotary);
+	sliderQualityL.setRange(0.1f, 2.0f, 0.05);
+	sliderQualityL.setValue(processor.getQualityValue(0));
+	sliderQualityL.setTextBoxStyle(Slider::TextBoxAbove, true, 100,20);
+	sliderQualityL.setTextBoxIsEditable(true);
 
-	sliderResL.onValueChange = [this]
+	sliderQualityL.onValueChange = [this]
 	{
-		processor.updateFilter(sliderFreqL.getValue(), sliderResL.getValue(), sliderGainL.getValue(), 0);
+		processor.updateFilter(sliderFreqL.getValue(), sliderQualityL.getValue(), sliderGainL.getValue(), 0);
 	};
-	addAndMakeVisible(&sliderResL);
+	addAndMakeVisible(&sliderQualityL);
 
 	sliderGainL.setSliderStyle(Slider::Rotary);
 	sliderGainL.setRange(-30.0f, 30.0f, 1.0f);
@@ -67,7 +67,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 	sliderGainL.onValueChange = [this]
 	{
-		processor.updateFilter(sliderFreqL.getValue(), sliderResL.getValue(), sliderGainL.getValue(), 0);
+		processor.updateFilter(sliderFreqL.getValue(), sliderQualityL.getValue(), sliderGainL.getValue(), 0);
 	};
 	addAndMakeVisible(&sliderGainL);
 
@@ -92,7 +92,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 			sliderGainL.setVisible(true);
 
 		}	
-		processor.updateFilter(sliderFreqL.getValue(), sliderResL.getValue(), sliderGainL.getValue(), 0); 
+		processor.updateFilter(sliderFreqL.getValue(), sliderQualityL.getValue(), sliderGainL.getValue(), 0); 
 	};
 
 	addAndMakeVisible(&btnFilterTypeL);
@@ -110,22 +110,22 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 	sliderFreqLM.onValueChange = [this]
 	{
-		processor.updateFilter(sliderFreqLM.getValue(), sliderResLM.getValue(), sliderGainLM.getValue(), 1);
+		processor.updateFilter(sliderFreqLM.getValue(), sliderQualityLM.getValue(), sliderGainLM.getValue(), 1);
 	};
 	addAndMakeVisible(&sliderFreqLM);
 
 
-	sliderResLM.setSliderStyle(Slider::Rotary);
-	sliderResLM.setRange(0.1f, 2.0f, 0.05); 
-	sliderResLM.setValue(processor.getResonanceValue(1));
-	sliderResLM.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
-	sliderResLM.setTextBoxIsEditable(true);
+	sliderQualityLM.setSliderStyle(Slider::Rotary);
+	sliderQualityLM.setRange(0.1f, 2.0f, 0.05); 
+	sliderQualityLM.setValue(processor.getQualityValue(1));
+	sliderQualityLM.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
+	sliderQualityLM.setTextBoxIsEditable(true);
 
-	sliderResLM.onValueChange = [this]
+	sliderQualityLM.onValueChange = [this]
 	{
-		processor.updateFilter(sliderFreqLM.getValue(), sliderResLM.getValue(), sliderGainLM.getValue(), 1);
+		processor.updateFilter(sliderFreqLM.getValue(), sliderQualityLM.getValue(), sliderGainLM.getValue(), 1);
 	};
-	addAndMakeVisible(&sliderResLM);
+	addAndMakeVisible(&sliderQualityLM);
 
 	sliderGainLM.setSliderStyle(Slider::Rotary);
 	sliderGainLM.setRange(-30.0f, 30.0f, 1.0f); 
@@ -137,7 +137,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 	sliderGainLM.onValueChange = [this]
 	{
-		processor.updateFilter(sliderFreqLM.getValue(), sliderResLM.getValue(), sliderGainLM.getValue(), 1);
+		processor.updateFilter(sliderFreqLM.getValue(), sliderQualityLM.getValue(), sliderGainLM.getValue(), 1);
 	};
 	addAndMakeVisible(&sliderGainLM);
 
@@ -152,22 +152,22 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 	sliderFreqHM.onValueChange = [this]
 	{
-		processor.updateFilter(sliderFreqHM.getValue(), sliderResHM.getValue(), sliderGainHM.getValue(), 2);
+		processor.updateFilter(sliderFreqHM.getValue(), sliderQualityHM.getValue(), sliderGainHM.getValue(), 2);
 	};
 	addAndMakeVisible(&sliderFreqHM);
 
 
-	sliderResHM.setSliderStyle(Slider::Rotary);
-	sliderResHM.setRange(0.1f, 2.0f, 0.05); 
-	sliderResHM.setValue(processor.getResonanceValue(2));
-	sliderResHM.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
-	sliderResHM.setTextBoxIsEditable(true);
+	sliderQualityHM.setSliderStyle(Slider::Rotary);
+	sliderQualityHM.setRange(0.1f, 2.0f, 0.05); 
+	sliderQualityHM.setValue(processor.getQualityValue(2));
+	sliderQualityHM.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
+	sliderQualityHM.setTextBoxIsEditable(true);
 
-	sliderResHM.onValueChange = [this]
+	sliderQualityHM.onValueChange = [this]
 	{
-		processor.updateFilter(sliderFreqHM.getValue(), sliderResHM.getValue(), sliderGainHM.getValue(), 2);
+		processor.updateFilter(sliderFreqHM.getValue(), sliderQualityHM.getValue(), sliderGainHM.getValue(), 2);
 	};
-	addAndMakeVisible(&sliderResHM);
+	addAndMakeVisible(&sliderQualityHM);
 
 
 	sliderGainHM.setSliderStyle(Slider::Rotary);
@@ -179,7 +179,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 	sliderGainHM.onValueChange = [this]
 	{
-		processor.updateFilter(sliderFreqHM.getValue(), sliderResHM.getValue(), sliderGainHM.getValue(), 2);
+		processor.updateFilter(sliderFreqHM.getValue(), sliderQualityHM.getValue(), sliderGainHM.getValue(), 2);
 	};
 	addAndMakeVisible(&sliderGainHM);
 
@@ -195,23 +195,23 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 	sliderFreqH.onValueChange = [this]
 	{
-		processor.updateFilter(sliderFreqH.getValue(), sliderResH.getValue(), sliderGainH.getValue(), 3);
+		processor.updateFilter(sliderFreqH.getValue(), sliderQualityH.getValue(), sliderGainH.getValue(), 3);
 
 	};
 	addAndMakeVisible(&sliderFreqH);
 
 
-	sliderResH.setSliderStyle(Slider::Rotary);
-	sliderResH.setRange(0.1f, 2.0f, 0.05);
-	sliderResH.setValue(processor.getResonanceValue(3));
-	sliderResH.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
-	sliderResH.setTextBoxIsEditable(true);
+	sliderQualityH.setSliderStyle(Slider::Rotary);
+	sliderQualityH.setRange(0.1f, 2.0f, 0.05);
+	sliderQualityH.setValue(processor.getQualityValue(3));
+	sliderQualityH.setTextBoxStyle(Slider::TextBoxAbove, true, 80, 20);
+	sliderQualityH.setTextBoxIsEditable(true);
 
-	sliderResH.onValueChange = [this]
+	sliderQualityH.onValueChange = [this]
 	{
-		processor.updateFilter(sliderFreqH.getValue(), sliderResH.getValue(), sliderGainH.getValue(), 3);
+		processor.updateFilter(sliderFreqH.getValue(), sliderQualityH.getValue(), sliderGainH.getValue(), 3);
 	};
-	addAndMakeVisible(&sliderResH);
+	addAndMakeVisible(&sliderQualityH);
 
 	sliderGainH.setSliderStyle(Slider::Rotary);
 	sliderGainH.setTextValueSuffix("dB");
@@ -222,7 +222,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 
 	sliderGainH.onValueChange = [this]
 	{
-		processor.updateFilter(sliderFreqH.getValue(), sliderResH.getValue(), sliderGainH.getValue(), 3);
+		processor.updateFilter(sliderFreqH.getValue(), sliderQualityH.getValue(), sliderGainH.getValue(), 3);
 	};
 	addAndMakeVisible(&sliderGainH);
 
@@ -244,7 +244,7 @@ Eq_spectrumAudioProcessorEditor::Eq_spectrumAudioProcessorEditor(Eq_spectrumAudi
 		else {
 			sliderGainH.setVisible(true);
 		}
-		processor.updateFilter(sliderFreqH.getValue(), sliderResH.getValue(), sliderGainH.getValue(), 3); 
+		processor.updateFilter(sliderFreqH.getValue(), sliderQualityH.getValue(), sliderGainH.getValue(), 3); 
 	};
 	addAndMakeVisible(&btnFilterTypeH);
 }
@@ -259,25 +259,38 @@ void Eq_spectrumAudioProcessorEditor::paint(Graphics& g)
 {
 	g.fillAll(Colours::black);
 	g.setColour(Colours::darkcyan);
-	g.fillRect(0, 255, 100, 400);
+	g.fillRect(0, 260, 100, 400);
 	g.setColour(Colours::darkgrey);
-	g.fillRect(100, 255,225,400);
+	g.fillRect(100, 260,225,400);
 	g.setColour(Colours::darkcyan);
-	g.fillRect(325, 255, 225, 400);
+	g.fillRect(325, 260, 225, 400);
 	g.setColour(Colours::darkgrey);
-	g.fillRect(550, 255, 225, 400);
+	g.fillRect(550, 260, 225, 400);
 	g.setColour(Colours::darkcyan);
-	g.fillRect(775, 255, 225, 400);
+	g.fillRect(775, 260, 225, 400);
 	g.setOpacity(1.0f);
 
 	g.setColour(Colours::white);
-	g.setFont(17);
+	g.setFont(16);
 	g.drawText("PEAK", 420, 260, 50, 30, Justification::centred);
 	g.drawText("PEAK", 640, 260, 50, 30,Justification::centred );
+
+	g.setFont(15);
+	g.drawText("FILTER TYPE", 10, 260, 100, 30, Justification::left);
+
+
 	g.setFont(26);
-	g.drawText("F", 20, 330, 50, 30, Justification::centred);
-	g.drawText("Q", 20, 430, 50, 30, Justification::centred);
-	g.drawText("G", 20, 530, 50, 30, Justification::centred);
+	g.drawText("F", 20, 320, 50, 30, Justification::centred);
+	g.drawText("Q", 20, 420, 50, 30, Justification::centred);
+	g.drawText("G", 20, 520, 50, 30, Justification::centred);
+
+
+	g.setFont(10);
+	g.drawText("CHANGE", 245, 255, 100, 30, Justification::left);
+	g.drawText("TYPE", 245, 267, 100, 30, Justification::left);
+	g.drawText("CHANGE", 915, 255, 100, 30, Justification::left);
+	g.drawText("TYPE", 915, 267, 100, 30, Justification::left);
+
 
 
 	sc.prepareToPaintSpectrum(processor.getFFTSize(), processor.getFFTData());
@@ -291,23 +304,23 @@ void Eq_spectrumAudioProcessorEditor::resized()
 	sc.setBounds(0, 20, 1000, 260);  // -
 
 
-	btnFilterTypeL.setBounds(190, 260, 50, 30);
+	btnFilterTypeL.setBounds(190, 265, 50, 25);
 	sliderFreqL.setBounds(160, 300, 100, 100);
-	sliderResL.setBounds(160, 400, 100, 100);
+	sliderQualityL.setBounds(160, 400, 100, 100);
 	sliderGainL.setBounds(160, 500, 100, 100);
 
 
 	sliderFreqLM.setBounds(390, 300, 100, 100);
-	sliderResLM.setBounds(390, 400, 100, 100);
+	sliderQualityLM.setBounds(390, 400, 100, 100);
 	sliderGainLM.setBounds(390, 500, 100, 100);
 
 	sliderFreqHM.setBounds(610, 300, 100, 100);
-	sliderResHM.setBounds(610, 400, 100, 100);
+	sliderQualityHM.setBounds(610, 400, 100, 100);
 	sliderGainHM.setBounds(610, 500, 100, 100);
 
-	btnFilterTypeH.setBounds(870, 260, 50, 30);
+	btnFilterTypeH.setBounds(860, 265, 50, 25);
 	sliderFreqH.setBounds(830, 300, 100, 100);
-	sliderResH.setBounds(830, 400, 100, 100);
+	sliderQualityH.setBounds(830, 400, 100, 100);
 	sliderGainH.setBounds(830, 500, 100, 100);
 
 }

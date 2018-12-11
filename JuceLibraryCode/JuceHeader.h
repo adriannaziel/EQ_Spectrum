@@ -41,7 +41,7 @@
 #if ! JUCE_DONT_DECLARE_PROJECTINFO
 namespace ProjectInfo
 {
-    const char* const  projectName    = "EQ_Spectrum";
+    const char* const  projectName    = "EQ_Spectrum_Plugin";
     const char* const  versionString  = "1.0.0";
     const int          versionNumber  = 0x10000;
 }
